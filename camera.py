@@ -5,11 +5,33 @@ import cv2
 from statistics import median
 import threading
 
-# c = Camera(0)
-# c.start()
-# c.current_distance
-
 class Camera(threading.Thread):
+
+    def __init__(self, device_ind):
+        super().__init__()
+        
+        self.device_ind = device_ind
+        self.known_distance = 18
+        self.known_width = 7.5
+        self.current_distance = 0
+
+        image = cv2.imread("images/square.jpg")
+        marker = self.find_marker(image)
+        self.focalLength = (marker[1][0] * self.known_distance) / self.known_width
+    
+    def run(self):
+        cap = cv2.VideoCapture(self.device_ind)
+        prev_dist = []
+        while True:
+            ret, frame = cap.read()
+            marker = self.find_marker(frame)
+            if marker:
+                prev_dist.append(self.distance_to_camera(marker[1][0]))
+                if len(prev_dist) >= 10:
+                    self.current_distance = median(prev_dist)
+                    prev_dist = []
+        cap.release()
+        cv2.destroyAllWindows()
 
     def find_marker(self, image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -23,38 +45,10 @@ class Camera(threading.Thread):
             peri = cv2.arcLength(c, True)
             approx = cv2.approxPolyDP(c, 0.02 * peri, True)
             if len(approx) == 4:
-                (x, y, w, h) = cv2.boundingRect(approx)
+                (_, _, w, h) = cv2.boundingRect(approx)
                 ar = w / float(h)
                 if ar >= 0.95 and ar <= 1.05:
                     return cv2.minAreaRect(approx)
-
-    def __init__(self, device_ind):
-        super().__init__()
-        self.device_ind = device_ind
-
-        self.known_distance = 18
-        self.known_width = 7.5
-
-        image = cv2.imread("images/square.jpg")
-        marker = self.find_marker(image)
-        self.focalLength = (marker[1][0] * self.known_distance) / self.known_width
-
-        self.current_distance = 0
     
-    def distance_to_camera(self, knownWidth, focalLength, perWidth):
-	    # compute and return the distance from the maker to the camera
-	    return (knownWidth * focalLength) / perWidth
-    
-    def run(self):
-        cap = cv2.VideoCapture(self.device_ind)
-        prev_dist = []
-        while True:
-            ret, frame = cap.read()
-            marker = self.find_marker(frame)
-            if marker:
-                prev_dist.append(self.distance_to_camera(self.known_width, self.focalLength, marker[1][0]))
-                if len(prev_dist) >= 10:
-                    self.current_distance = median(prev_dist)
-                    prev_dist = []
-        cap.release()
-        cv2.destroyAllWindows()
+    def distance_to_camera(self, perWidth):
+	    return (self.knownWidth * self.focalLength) / perWidth
