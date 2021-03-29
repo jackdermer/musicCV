@@ -54,14 +54,14 @@ class Camera(threading.Thread):
 	    return (self.known_width * self.focal_length) / perWidth
 
 
-c1 = Camera(1)
-c2 = Camera(2)
-c3 = Camera(3)
-c4 = Camera(4)
-c1.start()
-c2.start()
-c3.start()
-c4.start()
+#c1 = Camera(1)
+#c2 = Camera(2)
+#c3 = Camera(3)
+#c4 = Camera(4)
+#c1.start()
+#c2.start()
+#c3.start()
+#c4.start()
 # c1.run()
 # c2.start()
 # c3 = Camera(2)
