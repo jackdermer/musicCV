@@ -7,17 +7,19 @@ import threading
 
 class Camera(threading.Thread):
 
-    def __init__(self, device_ind):
+    def __init__(self, device_ind, callibration=1142, known_distance=36):
         super().__init__()
-        
         self.device_ind = device_ind
-        self.known_distance = 18
+        self.known_distance = known_distance
         self.known_width = 7.5
         self.current_distance = 0
 
-        image = cv2.imread("images/square.jpg")
-        marker = self.find_marker(image)
-        self.focal_length = (marker[1][0] * self.known_distance) / self.known_width
+        if isinstance(callibration, str):
+            image = cv2.imread(callibration)
+            marker = self.find_marker(image)
+            self.focal_length = (marker[1][0] * self.known_distance) / self.known_width
+        else:
+            self.focal_length = callibration
     
     def run(self):
         cap = cv2.VideoCapture(self.device_ind)
@@ -53,21 +55,6 @@ class Camera(threading.Thread):
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
-
-#c1 = Camera(1)
-#c2 = Camera(2)
-#c3 = Camera(3)
-#c4 = Camera(4)
-#c1.start()
-#c2.start()
-#c3.start()
-#c4.start()
-# c1.run()
-# c2.start()
-# c3 = Camera(2)
-# c4 = Camera(3)
-# while True:
-#     print(c1.current_distance)
-#     print(c2.current_distance)
-# print(c3.current_distance)
-# print(c4.current_distance)
+# c = Camera(0)
+# c.start()
+# print(c.current_distance)
