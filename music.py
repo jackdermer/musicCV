@@ -15,7 +15,7 @@ def play(c1, c2, c3, c4):
         print("C1_Freq: ", c1_dist * scale)
         f.play()
         a = Sine(freq=c1_dist * scale, mul=f).out(0)
-        time.sleep(attack + decay)
+        time.sleep(length*2)
 
         #Camera 2
         c2_dist = int(c2.current_distance)
@@ -23,7 +23,7 @@ def play(c1, c2, c3, c4):
         print("C2_Freq: ", c2_dist * scale)
         f.play()
         a = Sine(freq=c2_dist * scale, mul=f).out(0)
-        time.sleep(attack + decay)
+        time.sleep(length*2)
 
         #Camera 3
         c3_dist = int(c3.current_distance)
@@ -31,7 +31,7 @@ def play(c1, c2, c3, c4):
         print("C3_Freq: ", c3_dist * scale)
         f.play()
         a = Sine(freq=c3_dist * scale, mul=f).out(0)
-        time.sleep(attack + decay)
+        time.sleep(length*2)
 
         #Camera 4
         c4_dist = int(c4.current_distance)
@@ -39,7 +39,7 @@ def play(c1, c2, c3, c4):
         print("C4_Freq: ", c4_dist * scale)
         f.play()
         a = Sine(freq=c4_dist * scale, mul=f).out(0)
-        time.sleep(attack + decay)
+        time.sleep(length*2)
 
 
 s = Server().boot()
