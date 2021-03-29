@@ -3,27 +3,63 @@ import time
 from camera import Camera
 
 
-def play(c, masterVol=100, tempo=60):
-    activate = True
-    attack = 1
-    decay = 1
-    f = Adsr(attack=attack, decay=decay, sustain=0, release=0)
-    # prev = int(c.get_distance() * 3)
-    # x = prev
-    # w = int(c.distance_to_camera() * 4)
-    # a = Sine(freq=w, mul=f).out()
-    d = 0
-    while activate:
-        # prev = x
+def play(c1, c2, c3, c4):
+    length = 1
+    scale = 3
+    f = Adsr(attack=length, decay=length, sustain=0, release=0)
+
+    while True:
+        #Camera 1
+        c1_dist = int(c1.current_distance)
+        print("C1_Dist: ", c1_dist)
+        print("C1_Freq: ", c1_dist * scale)
         f.play()
-        # x = int(c.distance_to_camera(3) * 4)
-        # print(x)
-        a = Sine(freq=500, mul=f)
-        lfo = Sine(freq=d, mul=.5, add=.5)
-        d = Disto(a, drive=lfo, slope=.8, mul=.1).out()
+        a = Sine(freq=c1_dist * scale, mul=f).out(0)
         time.sleep(attack + decay)
-        d = d + 0.1 
-        print("done")
+
+        #Camera 2
+        c2_dist = int(c2.current_distance)
+        print("C2_Dist: ", c2_dist)
+        print("C2_Freq: ", c2_dist * scale)
+        f.play()
+        a = Sine(freq=c2_dist * scale, mul=f).out(0)
+        time.sleep(attack + decay)
+
+        #Camera 3
+        c3_dist = int(c3.current_distance)
+        print("C3_Dist: ", c3_dist)
+        print("C3_Freq: ", c3_dist * scale)
+        f.play()
+        a = Sine(freq=c3_dist * scale, mul=f).out(0)
+        time.sleep(attack + decay)
+
+        #Camera 4
+        c4_dist = int(c4.current_distance)
+        print("C4_Dist: ", c4_dist)
+        print("C4_Freq: ", c4_dist * scale)
+        f.play()
+        a = Sine(freq=c4_dist * scale, mul=f).out(0)
+        time.sleep(attack + decay)
+
+
+s = Server().boot()
+s.start()
+c1 = Camera(1)
+c2 = Camera(2)
+c3 = Camera(3)
+c4 = Camera(4)
+c1.start()
+c2.start()
+c3.start()
+c4.start()
+
+play(c1,c2,c3,c4)
+
+
+
+        # lfo = Sine(freq=d, mul=.5, add=.5)
+        # d = Disto(a, drive=lfo, slope=.8, mul=.1).out()
+        # d = d + 0.1 
         # f.stop()
         # time.sleep(1)
         # if x >= prev:
@@ -42,14 +78,3 @@ def play(c, masterVol=100, tempo=60):
     # f.play()
     # for i in range(10):
     #     a = Sine(freq=i*80, mul=f).out()
-
-
-
-
-s = Server().boot()
-s.start()
-c = Camera(0)
-# c.run()
-# print(c.distance_to_camera(2))
-play(c)
-
