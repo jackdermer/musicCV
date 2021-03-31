@@ -9,43 +9,52 @@ def play(c1, c2, c3, c4):
     f = Adsr(attack=length, decay=length, sustain=0, release=0)
 
     while True:
-        #Camera 1
+        #Collect Camera Data
         c1_dist = int(c1.current_distance)
         print("C1_Dist: ", c1_dist)
         print("C1_Freq: ", c1_dist * scale)
-        f.play()
-        a = Sine(freq=c1_dist * scale, mul=f).out(0)
-        time.sleep(length*2)
 
-        #Camera 2
         c2_dist = int(c2.current_distance)
         print("C2_Dist: ", c2_dist)
         print("C2_Freq: ", c2_dist * scale)
-        f.play()
-        a = Sine(freq=c2_dist * scale, mul=f).out(0)
-        time.sleep(length*2)
 
-        #Camera 3
         c3_dist = int(c3.current_distance)
         print("C3_Dist: ", c3_dist)
         print("C3_Freq: ", c3_dist * scale)
-        f.play()
-        a = Sine(freq=c3_dist * scale, mul=f).out(0)
-        time.sleep(length*2)
 
-        #Camera 4
         c4_dist = int(c4.current_distance)
         print("C4_Dist: ", c4_dist)
         print("C4_Freq: ", c4_dist * scale)
+
+
+        # f.play()
+        # Sine(freq=c1_dist * scale, mul=f).out(0)
+        # time.sleep(length*2)
+
+        # Sine(freq=c2_dist * scale, mul=f).out(0)
+        # time.sleep(length*2)
+
+        # Sine(freq=c3_dist * scale, mul=f).out(0)
+        # time.sleep(length*2)
+
+        # Sine(freq=c4_dist * scale, mul=f).out(0)
+        # time.sleep(length*2)
+
+        print(pa_list_devices())
+        s.setOutputDevice(4)
         f.play()
-        a = Sine(freq=c4_dist * scale, mul=f).out(0)
+        a = Sine(freq=200, mul=f).out(0)
+        b = Sine(freq=300, mul=f).out(0)
+        c = Sine(freq=400, mul=f).out(1)
+        d = Sine(freq=500, mul=f).out(1)
+
         time.sleep(length*2)
 
 
 s = Server().boot()
 s.start()
-c1 = Camera(0)
-c2 = Camera(1)
+c1 = Camera(1)
+c2 = Camera(2)
 c3 = Camera(3)
 c4 = Camera(4)
 c1.start()
