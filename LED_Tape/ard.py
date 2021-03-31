@@ -13,10 +13,20 @@ green = board.get_pin('d:7:o')
 button = board.get_pin('a:0:i')
 state = button.read()
 
+color = 1
+
 while True:
     state = button.read()
 
     if state is not None and state > 0.0:
-        blue.write(1)
+        if color % 3 == 1:
+            blue.write(1)
+        elif color % 3 == 2:
+            red.write(1)
+        else: 
+            green.write(1)
     else:
         blue.write(0)
+        red.write(0)
+        green.write(0)
+        color += 1
