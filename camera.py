@@ -77,7 +77,7 @@ while True:
         
         c0 = Camera(0)
         c2 = Camera(2)
-        c4 = Camera(4)
+        # c4 = Camera(4)
 
         time.sleep(3)
         state = button.read()
@@ -88,7 +88,7 @@ while True:
         while state is None or state <=0.0:
             c0.update_distance()
             c2.update_distance()
-            c4.update_distance()
+            # c4.update_distance()
 
             c0_dist = int(c0.current_distance)
             print("C0_Dist: ", c0_dist)
@@ -98,9 +98,9 @@ while True:
             print("C2_Dist: ", c2_dist)
             print()
 
-            c4_dist = int(c4.current_distance)
-            print("C4_Dist: ", c4_dist)
-            print()
+            # c4_dist = int(c4.current_distance)
+            # print("C4_Dist: ", c4_dist)
+            # print()
 
             time.sleep(1)
         
@@ -110,7 +110,7 @@ while True:
         
         c0.kill()
         c2.kill()
-        c4.kill()
+        # c4.kill()
         
         green.write(0)
         red.write(1)
