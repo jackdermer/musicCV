@@ -44,12 +44,14 @@ class Camera:
     def update_distance(self):
         if self.cap.isOpened():
             ret, frame = self.cap.read()
-            if frame is not None:
+            if frame is None:
+                print(f"Error camera {self.device_ind} failed")
+                self.kill()
+                self.cap = cv2.VideoCapture(self.device_ind)
+            else:
                 marker = self.find_marker(frame)
                 if marker:
                     self.current_distance = self.distance_to_camera(marker[1][0])
-            else:
-                print("Error frame is None " + str(self.device_ind))
     
     def kill(self):
         self.cap.release()
