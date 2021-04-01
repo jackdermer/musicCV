@@ -79,7 +79,7 @@ while True:
     if state is not None and state > 0.0:
         blue.write(0)
         red.write(1)
-        print("starting cameras...")
+        print("seting up cameras...")
         
         c0 = Camera(0)
         c2 = Camera(2)
@@ -87,14 +87,19 @@ while True:
         c6 = Camera(6)
 
         time.sleep(3)
-        state = button.read()
-        print("cameras running")
-        red.write(0)
-        green.write(1)
+        print("cameras set up")
 
+        blue.write(1)
         print("waiting for connection")
         conn, addr = sock.accept()
+        blue.write(0)
+        print("connection established")
 
+        red.write(0)
+        green.write(1)
+        print("running program")
+
+        state = button.read()
         while state is None or state <=0.0:
             c0.update_distance()
             c2.update_distance()
