@@ -81,8 +81,8 @@ while True:
         c0 = Camera(0)
         c0.start()
 
-        # c2 = Camera(2)
-        # c2.start()
+        c2 = Camera(2)
+        c2.start()
 
         # c4 = Camera(4)
         # c4.start()
@@ -97,9 +97,9 @@ while True:
             print("C0_Dist: ", c0_dist)
             print()
 
-            # c2_dist = int(c2.current_distance)
-            # print("C2_Dist: ", c2_dist)
-            # print()
+            c2_dist = int(c2.current_distance)
+            print("C2_Dist: ", c2_dist)
+            print()
 
             # c4_dist = int(c4.current_distance)
             # print("C4_Dist: ", c4_dist)
@@ -108,6 +108,8 @@ while True:
             time.sleep(1)
         
             state = button.read()
+
+            c0.kill()
         
         print("Ending program")
         green.write(0)
