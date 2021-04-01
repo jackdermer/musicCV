@@ -58,10 +58,17 @@ class Camera(threading.Thread):
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
-c = Camera(1)
-c.start()
-while True:
-    print(c.current_distance)
+cap = cv2.VideoCapture(0)
+while cap.isOpened():
+    ret, frame = cap.read()
+    cv2.imshow("img", frame)
+    cv2.waitKey(1)
+cap.release()
+cv2.destroyAllWindows()
+# c = Camera(1)
+# c.start()
+# while True:
+#     print(c.current_distance)
 
 # c0 = Camera(0)
 # c0.start()
