@@ -58,41 +58,29 @@ class Camera(threading.Thread):
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
-cap = cv2.VideoCapture(0)
-while cap.isOpened():
-    ret, frame = cap.read()
-    cv2.imshow("img", frame)
-    cv2.waitKey(1)
-cap.release()
-cv2.destroyAllWindows()
-# c = Camera(1)
-# c.start()
-# while True:
-#     print(c.current_distance)
+c0 = Camera(0)
+c0.start()
 
-# c0 = Camera(0)
-# c0.start()
+c2 = Camera(2)
+c2.start()
 
-# c1 = Camera(1)
-# c1.start()
+c4 = Camera(4)
+c4.start()
 
-# c2 = Camera(2)
-# c2.start()
+while True:
+    c0_dist = int(c0.current_distance)
+    print("C0_Dist: ", c0_dist)
+    print()
 
-# while True:
-#     c0_dist = int(c0.current_distance)
-#     print("C0_Dist: ", c0_dist)
-#     print()
+    c2_dist = int(c2.current_distance)
+    print("C2_Dist: ", c2_dist)
+    print()
 
-#     c1_dist = int(c1.current_distance)
-#     print("C1_Dist: ", c1_dist)
-#     print()
+    c4_dist = int(c4.current_distance)
+    print("C4_Dist: ", c4_dist)
+    print()
 
-#     c2_dist = int(c2.current_distance)
-#     print("C2_Dist: ", c2_dist)
-#     print()
-
-#     time.sleep(1)
+    time.sleep(1)
 
 
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
