@@ -1,9 +1,10 @@
-from imutils import paths
-import numpy as np
 import imutils
 import cv2
 from statistics import median
 import threading
+import socket
+import pickle
+import time
 
 class Camera(threading.Thread):
 
@@ -55,6 +56,21 @@ class Camera(threading.Thread):
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
-# c = Camera(0)
-# c.start()
-# print(c.current_distance)
+c0 = Camera(0)
+c0.start()
+# c1 = Camera(1)
+# c2 = Camera(2)
+# c3 = Camera(3)
+
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.bind(("localhost", 8888))
+sock.listen(1)
+while True:
+    conn, addr = sock.accept()
+    c = 0
+    while True:
+        conn.send(pickle.dumps([c, c, c, c]))
+        c += 1
+        time.sleep(1)
+conn.close()
