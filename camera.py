@@ -34,11 +34,11 @@ class Camera:
             peri = cv2.arcLength(c, True)
             approx = cv2.approxPolyDP(c, 0.02 * peri, True)
             return cv2.minAreaRect(approx)
-            # if len(approx) == 4:
-                # (_, _, w, h) = cv2.boundingRect(approx)
-                # ar = w / float(h)
-                # if ar >= 0.95 and ar <= 1.05:
-                #     return cv2.minAreaRect(approx)
+            if len(approx) == 4:
+                (_, _, w, h) = cv2.boundingRect(approx)
+                ar = w / float(h)
+                if ar >= 0.95 and ar <= 1.05:
+                    return cv2.minAreaRect(approx)
     
     def update_distance(self):
         cap = cv2.VideoCapture(self.device_ind)
