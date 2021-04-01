@@ -43,9 +43,10 @@ class Camera:
     def update_distance(self):
         if self.cap.isOpened():
             ret, frame = self.cap.read()
-            marker = self.find_marker(frame)
-            if marker:
-                self.current_distance = self.distance_to_camera(marker[1][0])
+            if frame is not None:
+                marker = self.find_marker(frame)
+                if marker:
+                    self.current_distance = self.distance_to_camera(marker[1][0])
     
     def kill(self):
         self.cap.release()
