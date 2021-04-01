@@ -130,9 +130,9 @@ while True:
         
         print("Ending program")
         
-        c0.kill()
-        c2.kill()
-        c4.kill()
+        # c0.kill()
+        # c2.kill()
+        # c4.kill()
         
         green.write(0)
         red.write(1)
