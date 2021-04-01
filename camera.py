@@ -43,7 +43,7 @@ class Camera:
     def update_distance(self):
         cap = cv2.VideoCapture(self.device_ind)
         if cap.isOpened():
-            ret, frame = self.cap.read()
+            ret, frame = cap.read()
             if frame is not None:
                 marker = self.find_marker(frame)
                 if marker:
