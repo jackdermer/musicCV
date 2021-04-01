@@ -1,5 +1,7 @@
 import socket
 import pickle
+from pyo import *
+
 
 HOST = '192.168.1.254'
 PORT = 8888
@@ -9,6 +11,11 @@ s.connect((HOST, PORT))
 
 while True:
     data = s.recv(1024)
-    print(pickle.loads(data))
+    cams = pickle.loads(data))
+
+    c0 = cams[0]
+    c1 = cams[1]
+    c2 = cams[2]
+    c3 = cams[3]
     
 s.close()
