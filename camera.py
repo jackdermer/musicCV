@@ -58,19 +58,34 @@ class Camera(threading.Thread):
 
 c0 = Camera(0)
 c0.start()
-# c1 = Camera(1)
-# c2 = Camera(2)
-# c3 = Camera(3)
 
+c1 = Camera(1)
+c1.start()
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(("localhost", 8888))
-sock.listen(1)
+c2 = Camera(2)
+c2.start()
+
 while True:
-    conn, addr = sock.accept()
-    c = 0
-    while True:
-        conn.send(pickle.dumps([c, c, c, c]))
-        c += 1
-        time.sleep(1)
-conn.close()
+    c0_dist = int(c0.current_distance)
+    print("C0_Dist: ", c0_dist)
+
+    c1_dist = int(c1.current_distance)
+    print("C1_Dist: ", c1_dist)
+
+    c2_dist = int(c2.current_distance)
+    print("C2_Dist: ", c2_dist)
+
+    time.sleep(1)
+
+
+# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# sock.bind(("localhost", 8888))
+# sock.listen(1)
+# while True:
+#     conn, addr = sock.accept()
+#     c = 0
+#     while True:
+#         conn.send(pickle.dumps([c, c, c, c]))
+#         c += 1
+#         time.sleep(1)
+# conn.close()
