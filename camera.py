@@ -49,7 +49,7 @@ class Camera:
                 if marker:
                     self.current_distance = self.distance_to_camera(marker[1][0])
             else:
-                print("Error frame is None " + self.device_ind)
+                print("Error frame is None " + str(self.device_ind))
     
     def kill(self):
         self.cap.release()
