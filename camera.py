@@ -92,7 +92,7 @@ while True:
         while state is None or state <=0.0:
             c0.update_distance()
             c2.update_distance()
-            # c4.update_distance()
+            c4.update_distance()
 
             c0_dist = int(c0.current_distance)
             print("C0_Dist: ", c0_dist)
