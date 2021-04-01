@@ -37,7 +37,7 @@ class Camera:
             if len(approx) == 4:
                 (_, _, w, h) = cv2.boundingRect(approx)
                 ar = w / float(h)
-                if ar >= 0.95 and ar <= 1.05:
+                if ar >= 0.90 and ar <= 1.1:
                     return cv2.minAreaRect(approx)
     
     def update_distance(self):
@@ -53,24 +53,6 @@ class Camera:
         else:
             print(f"Error cap not open {self.device_ind}")
         cap.release()
-
-        # if not self.cap.isOpened():
-        #     print(f"Error camera {self.device_ind} failed")
-        #     self.kill()
-        #     self.cap = cv2.VideoCapture(self.device_ind)
-        # if self.cap.isOpened():
-        #     ret, frame = self.cap.read()
-        #     if frame is None:
-        #         print(f"Error camera {self.device_ind} failed")
-        #         self.kill()
-        #         self.cap = cv2.VideoCapture(self.device_ind)
-        #     else:
-        #         marker = self.find_marker(frame)
-        #         if marker:
-        #             self.current_distance = self.distance_to_camera(marker[1][0])
-    
-    # def kill(self):
-    #     self.cap.release()
     
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
