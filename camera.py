@@ -1,20 +1,19 @@
 import imutils
 import cv2
 from statistics import median
-import threading
 import socket
 import pickle
 import time
 import pyfirmata
 
-class Camera(threading.Thread):
-
+class Camera:
     def __init__(self, device_ind, callibration=1142, known_distance=36):
-        super().__init__()
         self.device_ind = device_ind
+        self.current_distance = 0
+        self.cap = cv2.VideoCapture(self.device_ind)
+
         self.known_distance = known_distance
         self.known_width = 7.5
-        self.current_distance = 0
 
         if isinstance(callibration, str):
             image = cv2.imread(callibration)
@@ -22,22 +21,8 @@ class Camera(threading.Thread):
             self.focal_length = (marker[1][0] * self.known_distance) / self.known_width
         else:
             self.focal_length = callibration
-    
-    def run(self):
-        cap = cv2.VideoCapture(self.device_ind)
-        prev_dist = []
-        while cap.isOpened():
-            ret, frame = cap.read()
-            marker = self.find_marker(frame)
-            if marker:
-                prev_dist.append(self.distance_to_camera(marker[1][0]))
-                if len(prev_dist) >= 10:
-                    self.current_distance = median(prev_dist)
-                    prev_dist = []
-            time.sleep(0.25)
-        cap.release()
-        cv2.destroyAllWindows()
 
+    
     def find_marker(self, image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         gray = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -55,9 +40,18 @@ class Camera(threading.Thread):
                 if ar >= 0.95 and ar <= 1.05:
                     return cv2.minAreaRect(approx)
     
+    def update_distance(self):
+        if self.cap.isOpened():
+            ret, frame = self.cap.read()
+            marker = self.find_marker(frame)
+            if marker:
+                self.current_distance = self.distance_to_camera(marker[1][0])
+    
+    def kill(self):
+        self.cap.release()
+    
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
-
 
 board = pyfirmata.Arduino('/dev/ttyACM0')
 
@@ -71,6 +65,8 @@ green = board.get_pin('d:5:o')
 button = board.get_pin('a:0:i')
 state = button.read()
 
+
+
 while True:
     state = button.read()
     blue.write(1)
@@ -78,14 +74,11 @@ while True:
         blue.write(0)
         red.write(1)
         print("starting cameras...")
+        
         c0 = Camera(0)
-        c0.start()
-
         c2 = Camera(2)
-        c2.start()
+        c4 = Camera(4)
 
-        # c4 = Camera(4)
-        # c4.start()
         time.sleep(3)
         state = button.read()
         print("cameras running")
@@ -93,6 +86,10 @@ while True:
         green.write(1)
 
         while state is None or state <=0.0:
+            c0.update_distance()
+            c2.update_distance()
+            c4.update_distance()
+
             c0_dist = int(c0.current_distance)
             print("C0_Dist: ", c0_dist)
             print()
@@ -101,48 +98,25 @@ while True:
             print("C2_Dist: ", c2_dist)
             print()
 
-            # c4_dist = int(c4.current_distance)
-            # print("C4_Dist: ", c4_dist)
-            # print()
+            c4_dist = int(c4.current_distance)
+            print("C4_Dist: ", c4_dist)
+            print()
 
             time.sleep(1)
         
             state = button.read()
         
         print("Ending program")
+        
+        c0.kill()
+        c2.kill()
+        c4.kill()
+        
         green.write(0)
         red.write(1)
         time.sleep(2)
         print("Ready to Run")
         red.write(0)
-
-
-
-
-# c0 = Camera(0)
-# c0.start()
-
-# c2 = Camera(2)
-# c2.start()
-
-# c4 = Camera(4)
-# c4.start()
-
-# while True:
-#     c0_dist = int(c0.current_distance)
-#     print("C0_Dist: ", c0_dist)
-#     print()
-
-#     c2_dist = int(c2.current_distance)
-#     print("C2_Dist: ", c2_dist)
-#     print()
-
-#     c4_dist = int(c4.current_distance)
-#     print("C4_Dist: ", c4_dist)
-#     print()
-
-#     time.sleep(1)
-
 
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # sock.bind(("localhost", 8888))
