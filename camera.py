@@ -5,6 +5,7 @@ import threading
 import socket
 import pickle
 import time
+import pyfirmata
 
 class Camera(threading.Thread):
 
@@ -57,29 +58,88 @@ class Camera(threading.Thread):
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
-c0 = Camera(0)
-c0.start()
 
-c2 = Camera(2)
-c2.start()
+board = pyfirmata.Arduino('/dev/ttyACM0')
 
-c4 = Camera(4)
-c4.start()
+it = pyfirmata.util.Iterator(board)
+it.start()
+
+blue = board.get_pin('d:5:o')
+red = board.get_pin('d:6:o')
+green = board.get_pin('d:7:o')
+
+button = board.get_pin('a:0:i')
+state = button.read()
 
 while True:
-    c0_dist = int(c0.current_distance)
-    print("C0_Dist: ", c0_dist)
-    print()
+    state = button.read()
+    blue.write(1)
+    if state is not None and state > 0.0:
+        blue.write(0)
+        red.write(1)
+        print("starting cameras...")
+        c0 = Camera(0)
+        c0.start()
 
-    c2_dist = int(c2.current_distance)
-    print("C2_Dist: ", c2_dist)
-    print()
+        c2 = Camera(2)
+        c2.start()
 
-    c4_dist = int(c4.current_distance)
-    print("C4_Dist: ", c4_dist)
-    print()
+        c4 = Camera(4)
+        c4.start()
+        time.sleep(3)
+        print("cameras running")
+        red.write(0)
+        green.write(1)
 
-    time.sleep(1)
+        while state is None or state <=0.0:
+            c0_dist = int(c0.current_distance)
+            print("C0_Dist: ", c0_dist)
+            print()
+
+            c2_dist = int(c2.current_distance)
+            print("C2_Dist: ", c2_dist)
+            print()
+
+            c4_dist = int(c4.current_distance)
+            print("C4_Dist: ", c4_dist)
+            print()
+
+            time.sleep(1)
+            state = button.read()
+        
+        print("Ending program")
+        green.write(0)
+        red.write(1)
+        time.sleep(2)
+        print("Ready to Run")
+        red.write(0)
+
+
+
+
+# c0 = Camera(0)
+# c0.start()
+
+# c2 = Camera(2)
+# c2.start()
+
+# c4 = Camera(4)
+# c4.start()
+
+# while True:
+#     c0_dist = int(c0.current_distance)
+#     print("C0_Dist: ", c0_dist)
+#     print()
+
+#     c2_dist = int(c2.current_distance)
+#     print("C2_Dist: ", c2_dist)
+#     print()
+
+#     c4_dist = int(c4.current_distance)
+#     print("C4_Dist: ", c4_dist)
+#     print()
+
+#     time.sleep(1)
 
 
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
