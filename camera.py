@@ -108,8 +108,6 @@ while True:
             time.sleep(1)
         
             state = button.read()
-
-            c0.kill()
         
         print("Ending program")
         green.write(0)
