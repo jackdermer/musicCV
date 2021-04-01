@@ -78,8 +78,8 @@ while True:
         blue.write(0)
         red.write(1)
         print("starting cameras...")
-        # c0 = Camera(0)
-        # c0.start()
+        c0 = Camera(0)
+        c0.start()
 
         # c2 = Camera(2)
         # c2.start()
@@ -93,9 +93,9 @@ while True:
         green.write(1)
 
         while state is None or state <=0.0:
-            # c0_dist = int(c0.current_distance)
-            # print("C0_Dist: ", c0_dist)
-            # print()
+            c0_dist = int(c0.current_distance)
+            print("C0_Dist: ", c0_dist)
+            print()
 
             # c2_dist = int(c2.current_distance)
             # print("C2_Dist: ", c2_dist)
@@ -104,7 +104,6 @@ while True:
             # c4_dist = int(c4.current_distance)
             # print("C4_Dist: ", c4_dist)
             # print()
-            print("yurrr")
 
             time.sleep(1)
         
