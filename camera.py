@@ -60,7 +60,8 @@ class Camera(threading.Thread):
 
 c = Camera(1)
 c.start()
-c.join()
+while True:
+    print(c.current_distance)
 
 # c0 = Camera(0)
 # c0.start()
