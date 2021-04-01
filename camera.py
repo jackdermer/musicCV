@@ -25,15 +25,16 @@ class Camera(threading.Thread):
     def run(self):
         cap = cv2.VideoCapture(self.device_ind)
         prev_dist = []
-        while True:
+        while cap.isOpened():
             ret, frame = cap.read()
-            if frame is not None:
-                marker = self.find_marker(frame)
-                if marker:
-                    prev_dist.append(self.distance_to_camera(marker[1][0]))
-                    if len(prev_dist) >= 10:
-                        self.current_distance = median(prev_dist)
-                        prev_dist = []
+            marker = self.find_marker(frame)
+            if marker:
+                prev_dist.append(self.distance_to_camera(marker[1][0]))
+                if len(prev_dist) >= 10:
+                    self.current_distance = median(prev_dist)
+                    prev_dist = []
+            cv2.imshow("img", frame)
+            cv2.waitKey(1)
         cap.release()
         cv2.destroyAllWindows()
 
@@ -57,29 +58,32 @@ class Camera(threading.Thread):
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
-c0 = Camera(0)
-c0.start()
+c = Camera(1)
+c.start()
 
-c1 = Camera(1)
-c1.start()
+# c0 = Camera(0)
+# c0.start()
 
-c2 = Camera(2)
-c2.start()
+# c1 = Camera(1)
+# c1.start()
 
-while True:
-    c0_dist = int(c0.current_distance)
-    print("C0_Dist: ", c0_dist)
-    print()
+# c2 = Camera(2)
+# c2.start()
 
-    c1_dist = int(c1.current_distance)
-    print("C1_Dist: ", c1_dist)
-    print()
+# while True:
+#     c0_dist = int(c0.current_distance)
+#     print("C0_Dist: ", c0_dist)
+#     print()
 
-    c2_dist = int(c2.current_distance)
-    print("C2_Dist: ", c2_dist)
-    print()
+#     c1_dist = int(c1.current_distance)
+#     print("C1_Dist: ", c1_dist)
+#     print()
 
-    time.sleep(1)
+#     c2_dist = int(c2.current_distance)
+#     print("C2_Dist: ", c2_dist)
+#     print()
+
+#     time.sleep(1)
 
 
 # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
