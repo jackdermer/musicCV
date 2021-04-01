@@ -64,9 +64,9 @@ board = pyfirmata.Arduino('/dev/ttyACM0')
 it = pyfirmata.util.Iterator(board)
 it.start()
 
-blue = board.get_pin('d:5:o')
+blue = board.get_pin('d:7:o')
 red = board.get_pin('d:6:o')
-green = board.get_pin('d:7:o')
+green = board.get_pin('d:5:o')
 
 button = board.get_pin('a:0:i')
 state = button.read()
