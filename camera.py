@@ -27,12 +27,13 @@ class Camera(threading.Thread):
         prev_dist = []
         while True:
             ret, frame = cap.read()
-            marker = self.find_marker(frame)
-            if marker:
-                prev_dist.append(self.distance_to_camera(marker[1][0]))
-                if len(prev_dist) >= 10:
-                    self.current_distance = median(prev_dist)
-                    prev_dist = []
+            if frame:
+                marker = self.find_marker(frame)
+                if marker:
+                    prev_dist.append(self.distance_to_camera(marker[1][0]))
+                    if len(prev_dist) >= 10:
+                        self.current_distance = median(prev_dist)
+                        prev_dist = []
         cap.release()
         cv2.destroyAllWindows()
 
@@ -68,12 +69,15 @@ c2.start()
 while True:
     c0_dist = int(c0.current_distance)
     print("C0_Dist: ", c0_dist)
+    print()
 
     c1_dist = int(c1.current_distance)
     print("C1_Dist: ", c1_dist)
+    print()
 
     c2_dist = int(c2.current_distance)
     print("C2_Dist: ", c2_dist)
+    print()
 
     time.sleep(1)
 
