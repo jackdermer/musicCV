@@ -42,6 +42,10 @@ class Camera:
                 #     return cv2.minAreaRect(approx)
     
     def update_distance(self):
+        if not self.cap.isOpened():
+            print(f"Error camera {self.device_ind} failed")
+            self.kill()
+            self.cap = cv2.VideoCapture(self.device_ind)
         if self.cap.isOpened():
             ret, frame = self.cap.read()
             if frame is None:
