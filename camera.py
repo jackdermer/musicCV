@@ -33,8 +33,6 @@ class Camera(threading.Thread):
                 if len(prev_dist) >= 10:
                     self.current_distance = median(prev_dist)
                     prev_dist = []
-            cv2.imshow("img", frame)
-            cv2.waitKey(1)
         cap.release()
         cv2.destroyAllWindows()
 
