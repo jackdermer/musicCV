@@ -10,7 +10,6 @@ class Camera:
     def __init__(self, device_ind, callibration=1142, known_distance=36):
         self.device_ind = device_ind
         self.current_distance = 0
-        self.cap = cv2.VideoCapture(self.device_ind)
 
         self.known_distance = known_distance
         self.known_width = 7.5
@@ -42,23 +41,36 @@ class Camera:
                 #     return cv2.minAreaRect(approx)
     
     def update_distance(self):
-        if not self.cap.isOpened():
-            print(f"Error camera {self.device_ind} failed")
-            self.kill()
-            self.cap = cv2.VideoCapture(self.device_ind)
-        if self.cap.isOpened():
+        cap = cv2.VideoCapture(self.device_ind)
+        if cap.isOpened():
             ret, frame = self.cap.read()
-            if frame is None:
-                print(f"Error camera {self.device_ind} failed")
-                self.kill()
-                self.cap = cv2.VideoCapture(self.device_ind)
-            else:
+            if frame is not None:
                 marker = self.find_marker(frame)
                 if marker:
                     self.current_distance = self.distance_to_camera(marker[1][0])
+            else:
+                print(f"Error frame none {self.device_ind}")
+        else:
+            print(f"Error cap not open {self.device_ind}")
+        cap.release()
+
+        # if not self.cap.isOpened():
+        #     print(f"Error camera {self.device_ind} failed")
+        #     self.kill()
+        #     self.cap = cv2.VideoCapture(self.device_ind)
+        # if self.cap.isOpened():
+        #     ret, frame = self.cap.read()
+        #     if frame is None:
+        #         print(f"Error camera {self.device_ind} failed")
+        #         self.kill()
+        #         self.cap = cv2.VideoCapture(self.device_ind)
+        #     else:
+        #         marker = self.find_marker(frame)
+        #         if marker:
+        #             self.current_distance = self.distance_to_camera(marker[1][0])
     
-    def kill(self):
-        self.cap.release()
+    # def kill(self):
+    #     self.cap.release()
     
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
