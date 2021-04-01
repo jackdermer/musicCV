@@ -27,7 +27,7 @@ class Camera(threading.Thread):
         prev_dist = []
         while True:
             ret, frame = cap.read()
-            if frame:
+            if frame is not None:
                 marker = self.find_marker(frame)
                 if marker:
                     prev_dist.append(self.distance_to_camera(marker[1][0]))
