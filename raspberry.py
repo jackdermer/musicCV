@@ -69,7 +69,9 @@ green = board.get_pin('d:5:o')
 button = board.get_pin('a:0:i')
 state = button.read()
 
-
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.bind(("localhost", 8888))
+sock.listen(1)
 
 while True:
     state = button.read()
@@ -89,6 +91,9 @@ while True:
         print("cameras running")
         red.write(0)
         green.write(1)
+
+        print("waiting for connection")
+        conn, addr = sock.accept()
 
         while state is None or state <=0.0:
             c0.update_distance()
@@ -111,25 +116,18 @@ while True:
             c6_dist = int(c6.current_distance)
             print("C6_Dist: ", c6_dist)
             print()
+
+            conn.send(pickle.dumps([c0_dist, c2_dist, c4_dist, c6_dist]))
         
             state = button.read()
         
         print("Ending program")
         
+        conn.close()
+
+
         green.write(0)
         red.write(1)
         time.sleep(2)
         print("Ready to Run")
         red.write(0)
-
-# sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# sock.bind(("localhost", 8888))
-# sock.listen(1)
-# while True:
-#     conn, addr = sock.accept()
-#     c = 0
-#     while True:
-#         conn.send(pickle.dumps([c, c, c, c]))
-#         c += 1
-#         time.sleep(1)
-# conn.close()
