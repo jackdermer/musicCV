@@ -27,15 +27,15 @@ class Camera(threading.Thread):
         prev_dist = []
         while cap.isOpened():
             ret, frame = cap.read()
+            if self.device_ind == 2:
+                cv2.imshow("C2 footage", frame)
+                cv2.waitKey(1)
             marker = self.find_marker(frame)
             if marker:
                 prev_dist.append(self.distance_to_camera(marker[1][0]))
                 if len(prev_dist) >= 10:
                     self.current_distance = median(prev_dist)
                     prev_dist = []
-            if self.device_ind == 2:
-                cv2.imshow("C2 footage", frame)
-                cv2.waitKey(1)
         cap.release()
         cv2.destroyAllWindows()
 
