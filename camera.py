@@ -87,6 +87,7 @@ while True:
         c4 = Camera(4)
         c4.start()
         time.sleep(3)
+        state = button.read()
         print("cameras running")
         red.write(0)
         green.write(1)
