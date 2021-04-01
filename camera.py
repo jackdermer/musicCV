@@ -123,8 +123,6 @@ while True:
             c4_dist = int(c4.current_distance)
             print("C4_Dist: ", c4_dist)
             print()
-
-            time.sleep(1)
         
             state = button.read()
         
