@@ -33,7 +33,6 @@ class Camera:
         for c in cnts:
             peri = cv2.arcLength(c, True)
             approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-            return cv2.minAreaRect(approx)
             if len(approx) == 4:
                 (_, _, w, h) = cv2.boundingRect(approx)
                 ar = w / float(h)
