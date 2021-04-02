@@ -107,7 +107,7 @@ while True:
         c4 = Camera(4)
         c6 = Camera(6)
 
-        time.sleep(3)
+        time.sleep(1)
         print("cameras set up")
 
         red.write(0)
