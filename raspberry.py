@@ -70,7 +70,7 @@ button = board.get_pin('a:0:i')
 state = button.read()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(("192.168.1.254", 8888))
+sock.bind(("192.168.1.254", 8887))
 sock.listen(1)
 
 while True:
