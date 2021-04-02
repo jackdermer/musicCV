@@ -1,10 +1,11 @@
 import socket
 import pickle
 from pyo import *
+import sys
 
 
 HOST = '192.168.1.254'
-PORT = 8887
+PORT = int(sys.argv[1])
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
