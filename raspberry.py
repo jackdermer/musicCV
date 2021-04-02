@@ -72,8 +72,6 @@ def signal_handler(sig, frame):
     exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
-print('Press Ctrl+C')
-signal.pause()
 
 board = pyfirmata.Arduino('/dev/ttyACM0')
 
