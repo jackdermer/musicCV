@@ -5,6 +5,7 @@ import socket
 import pickle
 import time
 import pyfirmata
+import signal
 
 class Camera:
     def __init__(self, device_ind, callibration=1142, known_distance=36):
@@ -56,6 +57,23 @@ class Camera:
     
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
+
+
+def signal_handler(sig, frame):
+    global conn
+    global sock
+    print("Exiting gracefully")
+    if conn:
+        print("Closing conn")
+        conn.close()
+    if sock:
+        print("Closing sock")
+        sock.close()
+    exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+print('Press Ctrl+C')
+signal.pause()
 
 board = pyfirmata.Arduino('/dev/ttyACM0')
 
