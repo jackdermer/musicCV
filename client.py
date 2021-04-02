@@ -31,19 +31,23 @@ def update_vars():
 audio = Server().boot()
 audio.start()
 
-length = 2
+length = 0.5
 scale = 3
 f = Adsr(attack=length, decay=length, sustain=0, release=0)
 
 while True:
     update_vars()
-    time.sleep(0.5)
     f.play()
     a = Sine(freq=c0, mul=f).out(0)
+    time.sleep(length*2)
+    f.play()
     b = Sine(freq=c1, mul=f).out(0)
-    c = Sine(freq=c2, mul=f).out(1)
-    d = Sine(freq=c3, mul=f).out(1)
-
+    time.sleep(length*2)
+    f.play()
+    c = Sine(freq=c2, mul=f).out(0)
+    time.sleep(length*2)
+    f.play()
+    d = Sine(freq=c3, mul=f).out(0)
     time.sleep(length*2)
     
 s.close()
