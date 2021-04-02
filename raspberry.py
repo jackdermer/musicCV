@@ -6,6 +6,7 @@ import pickle
 import time
 import pyfirmata
 import signal
+import sys
 
 class Camera:
     def __init__(self, device_ind, callibration=1142, known_distance=36):
@@ -71,6 +72,10 @@ def signal_handler(sig, frame):
         sock.close()
     exit(0)
 
+if len(sys.argv) != 2:
+    print("Usage: raspberry.py <port>")
+    exit()
+
 signal.signal(signal.SIGINT, signal_handler)
 
 board = pyfirmata.Arduino('/dev/ttyACM0')
@@ -86,7 +91,7 @@ button = board.get_pin('a:0:i')
 state = button.read()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(("192.168.1.254", 8887))
+sock.bind(("192.168.1.254", sys.argv[1]))
 sock.listen(1)
 
 while True:
