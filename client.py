@@ -46,7 +46,7 @@ cam_vars = Update_Vars()
 cam_vars.start()
 
 
-length = 0.8
+length = .5
 scale = 6
 f = Adsr(attack=length, decay=length, sustain=0, release=0)
 
@@ -57,8 +57,20 @@ while True:
     c1 = c_list[1]
     c2 = c_list[2]
     f.play()
-    a = Sine(freq=c0*scale, mul=f).out()
+    a = Sine(freq=c0*scale, mul=f).out(0)
     time.sleep(length*2)
+
+    f.play()
+    a = Sine(freq=c1*scale, mul=f).out(0)
+    time.sleep(length*2)
+
+    f.play()
+    a = Sine(freq=c2*scale, mul=f).out(0)
+    time.sleep(length*2)
+
+    # f.play()
+    # a = Sine(freq=350, mul=f).out(0)
+    # time.sleep(length*2)
     # b = Sine(freq=c0*scale, mul=f).out()
     # f.play()
     # b = Sine(freq=c1*scale, mul=f).out()
