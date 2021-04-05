@@ -62,6 +62,27 @@ class Camera:
     def distance_to_camera(self, perWidth):
 	    return (self.known_width * self.focal_length) / perWidth
 
+class AlwaysOnCamera(Camera):
+    def __init__(self, device_ind):
+        super().__init__(device_ind)
+        self.cap = cv2.VideoCapture(self.device_ind)
+
+    def update_distance(self):
+        if cap.isOpened():
+            dists = []
+            for i in range(10):
+                ret, frame = cap.read()
+                if frame is not None:
+                    marker = self.find_marker(frame)
+                    if marker:
+                        dists.append(self.distance_to_camera(marker[1][0]))
+                else:
+                    print(f"Error frame none {self.device_ind}")
+            if len(dists) > 0:
+                self.current_distance = median(dists)
+        else:
+            print(f"Error cap not open {self.device_ind}")
+
 
 def signal_handler(sig, frame):
     global conn
@@ -105,7 +126,7 @@ while True:
         red.write(1)
         print("seting up cameras...")
         
-        c0 = Camera(0)
+        c0 = AlwaysOnCamera(0)
         c2 = Camera(2)
         c4 = Camera(4)
         c6 = Camera(6)
