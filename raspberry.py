@@ -126,9 +126,9 @@ while True:
             c4.update_distance()
             # c6.update_distance()
 
-            c0_dist = int(c0.current_distance)
-            print("C0_Dist: ", c0_dist)
-            print()
+            # c0_dist = int(c0.current_distance)
+            # print("C0_Dist: ", c0_dist)
+            # print()
 
             c2_dist = int(c2.current_distance)
             print("C2_Dist: ", c2_dist)
@@ -138,9 +138,9 @@ while True:
             print("C4_Dist: ", c4_dist)
             print()
 
-            c6_dist = int(c6.current_distance)
-            print("C6_Dist: ", c6_dist)
-            print()
+            # c6_dist = int(c6.current_distance)
+            # print("C6_Dist: ", c6_dist)
+            # print()
 
             conn.send(pickle.dumps([0, c2_dist, c4_dist, 0]))
         
