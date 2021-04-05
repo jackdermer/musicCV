@@ -25,26 +25,11 @@ class Update_Vars(threading.Thread):
         while True:
             self.data = pickle.loads(s.recv(1024))
 
-# def update_vars():
-#     data = s.recv(1024)
-#     if data:
-#         cams = pickle.loads(data)
-#         global c0
-#         global c1
-#         global c2
-#         # global c3
-#         c0 = cams[0]
-#         c1 = cams[1]
-#         c2 = cams[2]
-#         # c3 = cams[3]
-#         print(cams[0:3])
-
 audio = Server().boot()
 audio.start()
 
 cam_vars = Update_Vars()
 cam_vars.start()
-
 
 length = .5
 scale = 6
@@ -57,34 +42,40 @@ while True:
     c1 = c_list[1]
     c2 = c_list[2]
     c3 = c_list[3]
+    
     f.play()
     a = Sine(freq=c0*scale, mul=f).out(0)
     time.sleep(length*2)
+    
+    c_list = cam_vars.data
+    c0 = c_list[0]
+    c1 = c_list[1]
+    c2 = c_list[2]
+    c3 = c_list[3]
 
     f.play()
     a = Sine(freq=c1*scale, mul=f).out(0)
     time.sleep(length*2)
 
+    c_list = cam_vars.data
+    c0 = c_list[0]
+    c1 = c_list[1]
+    c2 = c_list[2]
+    c3 = c_list[3]
+
     f.play()
     a = Sine(freq=c2*scale, mul=f).out(0)
     time.sleep(length*2)
 
+    c_list = cam_vars.data
+    c0 = c_list[0]
+    c1 = c_list[1]
+    c2 = c_list[2]
+    c3 = c_list[3]
+
+
     f.play()
     a = Sine(freq=c3*scale, mul=f).out(0)
     time.sleep(length*2)
-
-    # f.play()
-    # a = Sine(freq=350, mul=f).out(0)
-    # time.sleep(length*2)
-    # b = Sine(freq=c0*scale, mul=f).out()
-    # f.play()
-    # b = Sine(freq=c1*scale, mul=f).out()
-    # time.sleep(length*2)
-    # f.play()
-    # c = Sine(freq=c2*scale, mul=f).out()
-    # time.sleep(length*2)
-    # f.play()
-    # d = Sine(freq=c3, mul=f).out(0)
-    # time.sleep(length*2)
     
 s.close()
