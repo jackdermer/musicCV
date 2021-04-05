@@ -28,35 +28,36 @@ class Camera:
         
         self.device_ind = device_ind
         self.always_on = always_on
-        if self.always_on:
-            self.cap = cv2.VideoCapture(self.device_ind)            
+        # if self.always_on:
+        #     self.cap = cv2.VideoCapture(self.device_ind)
+        self.cap = cv2.VideoCapture(self.device_ind) 
     
     def distance_to_camera(self, per_width):
         return (self.known_width * self.focal_length) / per_width
 
     def update_distance(self):
-        if self.always_on:
-            cap = self.cap
-        else:
-            cap = cv2.VideoCapture(self.device_ind)
-        if cap.isOpened():
-            dists = []
-            for i in range(1):
-                _, frame = cap.read()
-                if frame is not None:
-                    face = find_face(frame)
-                    if face is not None:
-                        # print(f"{self.device_ind} found face!")
-                        # dists.append(self.distance_to_camera(face[2]))
-                        self.current_distance = self.distance_to_camera(face[2])
-                else:
-                    print(f"Frame Error: {self.device_ind}")
-            if len(dists) > 0:
-                self.current_distance = median(dists)
+        # if self.always_on:
+        #     cap = self.cap
+        # else:
+        #     cap = cv2.VideoCapture(self.device_ind)
+        if self.cap.isOpened():
+            # dists = []
+            # for i in range(1):
+            _, frame = self.cap.read()
+            if frame is not None:
+                face = find_face(frame)
+                if face is not None:
+                    # print(f"{self.device_ind} found face!")
+                    # dists.append(self.distance_to_camera(face[2]))
+                    self.current_distance = self.distance_to_camera(face[2])
+            else:
+                print(f"Frame Error: {self.device_ind}")
+            # if len(dists) > 0:
+            #     self.current_distance = median(dists)
         else:
             print(f"Cap Error: {self.device_ind}")
-        if not self.always_on:
-            cap.release()
+        # if not self.always_on:
+            # cap.release()
 
 def signal_handler(sig, frame):
     global conn
@@ -100,10 +101,10 @@ while True:
         red.write(1)
         print("seting up cameras...")
         
-        c0 = Camera(0)
+        # c0 = Camera(0)
         c2 = Camera(2)
         c4 = Camera(4)
-        c6 = Camera(6)
+        # c6 = Camera(6)
 
         time.sleep(1)
         print("cameras set up")
@@ -126,9 +127,9 @@ while True:
             c4.update_distance()
             c6.update_distance()
 
-            c0_dist = int(c0.current_distance)
-            print("C0_Dist: ", c0_dist)
-            print()
+            # c0_dist = int(c0.current_distance)
+            # print("C0_Dist: ", c0_dist)
+            # print()
 
             c2_dist = int(c2.current_distance)
             print("C2_Dist: ", c2_dist)
@@ -138,11 +139,11 @@ while True:
             print("C4_Dist: ", c4_dist)
             print()
 
-            c6_dist = int(c6.current_distance)
-            print("C6_Dist: ", c6_dist)
-            print()
+            # c6_dist = int(c6.current_distance)
+            # print("C6_Dist: ", c6_dist)
+            # print()
 
-            conn.send(pickle.dumps([c0_dist, c2_dist, c4_dist, c6_dist]))
+            conn.send(pickle.dumps([0, c2_dist, c4_dist, 0]))
         
             state = button.read()
         
