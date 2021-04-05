@@ -122,27 +122,27 @@ while True:
         state = button.read()
         while state is None or state <=0.0:
             c0.update_distance()
-            # c2.update_distance()
-            # c4.update_distance()
+            c2.update_distance()
+            c4.update_distance()
             c6.update_distance()
 
             c0_dist = int(c0.current_distance)
             print("C0_Dist: ", c0_dist)
             print()
 
-            # c2_dist = int(c2.current_distance)
-            # print("C2_Dist: ", c2_dist)
-            # print()
+            c2_dist = int(c2.current_distance)
+            print("C2_Dist: ", c2_dist)
+            print()
 
-            # c4_dist = int(c4.current_distance)
-            # print("C4_Dist: ", c4_dist)
-            # print()
+            c4_dist = int(c4.current_distance)
+            print("C4_Dist: ", c4_dist)
+            print()
 
             c6_dist = int(c6.current_distance)
             print("C6_Dist: ", c6_dist)
             print()
 
-            conn.send(pickle.dumps([c0_dist, 0, 0, c6_dist]))
+            conn.send(pickle.dumps([c0_dist, c2_dist, c4_dist, c6_dist]))
         
             state = button.read()
         
