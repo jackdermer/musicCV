@@ -28,35 +28,38 @@ class Camera:
         
         self.device_ind = device_ind
         self.always_on = always_on
-        if self.always_on:
-            self.cap = cv2.VideoCapture(self.device_ind)
+        # if self.always_on:
+        #     self.cap = cv2.VideoCapture(self.device_ind)
+        self.cap = cv2.VideoCapture(self.device_ind)
             
     
     def distance_to_camera(self, per_width):
         return (self.known_width * self.focal_length) / per_width
 
     def update_distance(self):
-        if self.always_on:
-            cap = self.cap
-        else:
-            cap = cv2.VideoCapture(self.device_ind)
+        # if self.always_on:
+        #     cap = self.cap
+        # else:
+        #     cap = cv2.VideoCapture(self.device_ind)
         if cap.isOpened():
-            dists = []
-            for i in range(1):
-                _, frame = cap.read()
-                if frame is not None:
-                    face = find_face(frame)
-                    if face is not None:
-                        print(f"{self.device_ind} found face!")
-                        dists.append(self.distance_to_camera(face[2]))
-                else:
-                    print(f"Frame Error: {self.device_ind}")
-            if len(dists) > 0:
-                self.current_distance = median(dists)
+            # dists = []
+            # for i in range(1):
+                # _, frame = cap.read()
+            _, frame = self.cap.read()
+            if frame is not None:
+                face = find_face(frame)
+                if face is not None:
+                    # print(f"{self.device_ind} found face!")
+                    # dists.append(self.distance_to_camera(face[2]))
+                    self.current_distance = self.distance_to_camera(face[2])
+            else:
+                print(f"Frame Error: {self.device_ind}")
+            # if len(dists) > 0:
+            #     self.current_distance = median(dists)
         else:
             print(f"Cap Error: {self.device_ind}")
-        if not self.always_on:
-            cap.release()
+        # if not self.always_on:
+        #     cap.release()
 
 def signal_handler(sig, frame):
     global conn
