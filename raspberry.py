@@ -99,7 +99,7 @@ while True:
         red.write(1)
         print("seting up cameras...")
         
-        c0 = Camera(0, always_on=True)
+        c0 = Camera(0)
         c2 = Camera(2)
         c4 = Camera(4)
         c6 = Camera(6)
