@@ -68,10 +68,10 @@ class AlwaysOnCamera(Camera):
         self.cap = cv2.VideoCapture(self.device_ind)
 
     def update_distance(self):
-        if cap.isOpened():
+        if self.cap.isOpened():
             dists = []
             for i in range(10):
-                ret, frame = cap.read()
+                ret, frame = self.cap.read()
                 if frame is not None:
                     marker = self.find_marker(frame)
                     if marker:
