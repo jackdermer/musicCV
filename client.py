@@ -36,7 +36,7 @@ cam_vars = Update_Vars()
 cam_vars.start()
 
 length = .5
-scale = 6
+scale = 5
 f = Adsr(attack=length, decay=length, sustain=0, release=0)
 
 while True:
