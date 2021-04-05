@@ -19,7 +19,7 @@ c3 = 0
 class Update_Vars(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        res = pickle.loads(s.recv(1024))
+        res = s.recv(1024)
         if res:
             self.data = pickle.loads(res)
     
