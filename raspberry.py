@@ -103,10 +103,10 @@ while True:
         red.write(1)
         print("seting up cameras...")
         
-        # c0 = Camera(0)
-        c2 = Camera(2, always_on=True)
-        c4 = Camera(4, always_on=True)
-        # c6 = Camera(6)
+        c0 = Camera(0)
+        # c2 = Camera(2, always_on=True)
+        # c4 = Camera(4, always_on=True)
+        c6 = Camera(6)
 
         time.sleep(1)
         print("cameras set up")
