@@ -1,4 +1,3 @@
-import imutils
 import cv2
 from statistics import median
 import socket
@@ -8,81 +7,55 @@ import pyfirmata
 import signal
 import sys
 
+def callibrate(img_path, known_width, known_distance):
+    img = cv2.imread(img_path)
+    face = find_face(img)
+    return face[2] * known_distance / known_width
+
+def find_face(image):
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 8)
+    for face in faces:
+        return face
+
 class Camera:
-    def __init__(self, device_ind, callibration=1142, known_distance=36):
-        self.device_ind = device_ind
+    def __init__(self, device_ind, always_on=False, known_width=5.5, known_distance=26, cal_img='images/face.jpg'):
+        self.known_width = known_width
+        self.focal_length = callibrate(cal_img, known_width, known_distance)
+        
         self.current_distance = 0
-
-        self.known_distance = known_distance
-        self.known_width = 7.5
-
-        if isinstance(callibration, str):
-            image = cv2.imread(callibration)
-            marker = self.find_marker(image)
-            self.focal_length = (marker[1][0] * self.known_distance) / self.known_width
-        else:
-            self.focal_length = callibration
-
+        
+        self.device_ind = device_ind
+        self.always_on = always_on
+        if self.always_on:
+            self.cap = cv2.VideoCapture(self.device_ind)
+            
     
-    def find_marker(self, image):
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (5, 5), 0)
-        edged = cv2.Canny(gray, 35, 125)
+    def distance_to_camera(self, per_width):
+        return (self.known_width * self.focal_length) / per_width
 
-        cnts = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        cnts = imutils.grab_contours(cnts)
-        cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:5]
-        for c in cnts:
-            peri = cv2.arcLength(c, True)
-            approx = cv2.approxPolyDP(c, 0.04 * peri, True)
-            if len(approx) == 4:
-                (_, _, w, h) = cv2.boundingRect(approx)
-                ar = w / float(h)
-                if ar >= 0.95 and ar <= 1.05:
-                    return cv2.minAreaRect(approx)
-    
     def update_distance(self):
-        cap = cv2.VideoCapture(self.device_ind)
+        if self.always_on:
+            cap = self.cap
+        else:
+            cap = cv2.VideoCapture(self.device_ind)
         if cap.isOpened():
             dists = []
-            for i in range(10):
-                ret, frame = cap.read()
+            for i in range(5):
+                _, frame = cap.read()
                 if frame is not None:
-                    marker = self.find_marker(frame)
-                    if marker:
-                        dists.append(self.distance_to_camera(marker[1][0]))
+                    face = find_face(frame)
+                    if face is not None:
+                        dists.append(self.distance_to_camera(face[2]))
                 else:
-                    print(f"Error frame none {self.device_ind}")
+                    print(f"Frame Error: {self.device_ind}")
             if len(dists) > 0:
                 self.current_distance = median(dists)
         else:
-            print(f"Error cap not open {self.device_ind}")
-        cap.release()
-    
-    def distance_to_camera(self, perWidth):
-	    return (self.known_width * self.focal_length) / perWidth
-
-class AlwaysOnCamera(Camera):
-    def __init__(self, device_ind):
-        super().__init__(device_ind)
-        self.cap = cv2.VideoCapture(self.device_ind)
-
-    def update_distance(self):
-        if self.cap.isOpened():
-            dists = []
-            for i in range(10):
-                ret, frame = self.cap.read()
-                if frame is not None:
-                    marker = self.find_marker(frame)
-                    if marker:
-                        dists.append(self.distance_to_camera(marker[1][0]))
-                else:
-                    print(f"Error frame none {self.device_ind}")
-            if len(dists) > 0:
-                self.current_distance = median(dists)
-        else:
-            print(f"Error cap not open {self.device_ind}")
-
+            print(f"Cap Error: {self.device_ind}")
+        if not self.always_on:
+            cap.release()
 
 def signal_handler(sig, frame):
     global conn
@@ -126,7 +99,7 @@ while True:
         red.write(1)
         print("seting up cameras...")
         
-        c0 = AlwaysOnCamera(0)
+        c0 = Camera(0, always_on=True)
         c2 = Camera(2)
         c4 = Camera(4)
         c6 = Camera(6)
