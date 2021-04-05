@@ -47,6 +47,7 @@ class Camera:
                 if frame is not None:
                     face = find_face(frame)
                     if face is not None:
+                        print(f"{self.device_ind} found face!")
                         dists.append(self.distance_to_camera(face[2]))
                 else:
                     print(f"Frame Error: {self.device_ind}")
