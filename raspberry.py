@@ -42,7 +42,7 @@ class Camera:
             cap = cv2.VideoCapture(self.device_ind)
         if cap.isOpened():
             dists = []
-            for i in range(1):
+            for i in range(3):
                 _, frame = cap.read()
                 if frame is not None:
                     face = find_face(frame)
