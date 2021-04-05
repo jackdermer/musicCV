@@ -5,7 +5,7 @@ import sys
 import threading
 
 
-HOST = '192.168.1.254'
+HOST = '172.18.131.47'
 PORT = int(sys.argv[1])
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
