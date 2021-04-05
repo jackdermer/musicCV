@@ -34,24 +34,26 @@ class Camera:
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:5]
         for c in cnts:
             peri = cv2.arcLength(c, True)
-            approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-            return cv2.minAreaRect(approx)
-            # if len(approx) == 4:
-            #     (_, _, w, h) = cv2.boundingRect(approx)
-            #     ar = w / float(h)
-            #     if ar >= 0.90 and ar <= 1.1:
-            #         return cv2.minAreaRect(approx)
+            approx = cv2.approxPolyDP(c, 0.04 * peri, True)
+            if len(approx) == 4:
+                (_, _, w, h) = cv2.boundingRect(approx)
+                ar = w / float(h)
+                if ar >= 0.95 and ar <= 1.05:
+                    return cv2.minAreaRect(approx)
     
     def update_distance(self):
         cap = cv2.VideoCapture(self.device_ind)
         if cap.isOpened():
-            ret, frame = cap.read()
-            if frame is not None:
-                marker = self.find_marker(frame)
-                if marker:
-                    self.current_distance = self.distance_to_camera(marker[1][0])
-            else:
-                print(f"Error frame none {self.device_ind}")
+            dists = []
+            while(len(dists) < 10):
+                ret, frame = cap.read()
+                if frame is not None:
+                    marker = self.find_marker(frame)
+                    if marker:
+                        dists.append(self.distance_to_camera(marker[1][0]))
+                else:
+                    print(f"Error frame none {self.device_ind}")
+            self.current_distance = median(dists)
         else:
             print(f"Error cap not open {self.device_ind}")
         cap.release()
