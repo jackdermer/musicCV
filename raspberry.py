@@ -41,7 +41,7 @@ class Camera:
         #     cap = self.cap
         # else:
         #     cap = cv2.VideoCapture(self.device_ind)
-        if cap.isOpened():
+        if self.cap.isOpened():
             # dists = []
             # for i in range(1):
                 # _, frame = cap.read()
