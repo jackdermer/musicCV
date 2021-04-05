@@ -100,10 +100,10 @@ while True:
         red.write(1)
         print("seting up cameras...")
         
-        c0 = Camera(0)
-        c2 = Camera(2)
-        c4 = Camera(4)
-        c6 = Camera(6)
+        # c0 = Camera(0)
+        c2 = Camera(2, always_on=True)
+        c4 = Camera(4, always_on=True)
+        # c6 = Camera(6)
 
         time.sleep(1)
         print("cameras set up")
@@ -121,10 +121,10 @@ while True:
 
         state = button.read()
         while state is None or state <=0.0:
-            c0.update_distance()
+            # c0.update_distance()
             c2.update_distance()
             c4.update_distance()
-            c6.update_distance()
+            # c6.update_distance()
 
             c0_dist = int(c0.current_distance)
             print("C0_Dist: ", c0_dist)
@@ -142,7 +142,7 @@ while True:
             print("C6_Dist: ", c6_dist)
             print()
 
-            conn.send(pickle.dumps([c0_dist, c2_dist, c4_dist, c6_dist]))
+            conn.send(pickle.dumps([0, c2_dist, c4_dist, 0]))
         
             state = button.read()
         
