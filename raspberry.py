@@ -93,7 +93,7 @@ button = board.get_pin('a:0:i')
 state = button.read()
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(("192.168.1.254", sys.argv[1]))
+sock.bind(("192.168.1.254", int(sys.argv[1])))
 sock.listen(1)
 
 while True:
@@ -109,7 +109,7 @@ while True:
         c4 = Camera(4)
         c6 = Camera(6)
 
-        time.sleep(3)
+        time.sleep(1)
         print("cameras set up")
 
         red.write(0)
