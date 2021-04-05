@@ -51,7 +51,7 @@ class Camera:
         if not self.always_on:
             cap.release()
 
-c = Camera(0)
+c = Camera(0, always_on=True)
 while True:
     c.update_distance()
     print(c.current_distance)
