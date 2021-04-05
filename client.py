@@ -14,7 +14,7 @@ s.connect((HOST, PORT))
 c0 = 0
 c1 = 0
 c2 = 0
-# c3 = 0
+c3 = 0
 
 class Update_Vars(threading.Thread):
     def __init__(self):
@@ -56,6 +56,7 @@ while True:
     c0 = c_list[0]
     c1 = c_list[1]
     c2 = c_list[2]
+    c3 = c_list[3]
     f.play()
     a = Sine(freq=c0*scale, mul=f).out(0)
     time.sleep(length*2)
@@ -66,6 +67,10 @@ while True:
 
     f.play()
     a = Sine(freq=c2*scale, mul=f).out(0)
+    time.sleep(length*2)
+
+    f.play()
+    a = Sine(freq=c3*scale, mul=f).out(0)
     time.sleep(length*2)
 
     # f.play()
