@@ -35,7 +35,7 @@ audio.start()
 cam_vars = Update_Vars()
 cam_vars.start()
 
-length = .5
+length = .3
 scale = 5
 f = Adsr(attack=length, decay=length, sustain=0, release=0)
 
@@ -47,15 +47,15 @@ while True:
     c2 = c_list[2]
     c3 = c_list[3]
     
-    f.play()
-    a = Sine(freq=c0*scale, mul=f).out(0)
-    time.sleep(length*2)
+    # f.play()
+    # a = Sine(freq=c0*scale, mul=f).out(0)
+    # time.sleep(length*2)
     
-    c_list = cam_vars.data
-    c0 = c_list[0]
-    c1 = c_list[1]
-    c2 = c_list[2]
-    c3 = c_list[3]
+    # c_list = cam_vars.data
+    # c0 = c_list[0]
+    # c1 = c_list[1]
+    # c2 = c_list[2]
+    # c3 = c_list[3]
 
     f.play()
     a = Sine(freq=c1*scale, mul=f).out(0)
@@ -71,15 +71,15 @@ while True:
     a = Sine(freq=c2*scale, mul=f).out(0)
     time.sleep(length*2)
 
-    c_list = cam_vars.data
-    c0 = c_list[0]
-    c1 = c_list[1]
-    c2 = c_list[2]
-    c3 = c_list[3]
+    # c_list = cam_vars.data
+    # c0 = c_list[0]
+    # c1 = c_list[1]
+    # c2 = c_list[2]
+    # c3 = c_list[3]
 
 
-    f.play()
-    a = Sine(freq=c3*scale, mul=f).out(0)
-    time.sleep(length*2)
+    # f.play()
+    # a = Sine(freq=c3*scale, mul=f).out(0)
+    # time.sleep(length*2)
     
 s.close()
