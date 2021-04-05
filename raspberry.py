@@ -15,7 +15,7 @@ def callibrate(img_path, known_width, known_distance):
 def find_face(image):
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, 1.05, 8)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 8)
     if len(faces) > 0:
         return sorted(faces, key=lambda x: x[2], reverse=True)[0]
 
