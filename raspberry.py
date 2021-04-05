@@ -45,7 +45,7 @@ class Camera:
         cap = cv2.VideoCapture(self.device_ind)
         if cap.isOpened():
             dists = []
-            while(len(dists) < 10):
+            for i in range(10):
                 ret, frame = cap.read()
                 if frame is not None:
                     marker = self.find_marker(frame)
@@ -53,7 +53,8 @@ class Camera:
                         dists.append(self.distance_to_camera(marker[1][0]))
                 else:
                     print(f"Error frame none {self.device_ind}")
-            self.current_distance = median(dists)
+            if len(dists) > 0:
+                self.current_distance = median(dists)
         else:
             print(f"Error cap not open {self.device_ind}")
         cap.release()
